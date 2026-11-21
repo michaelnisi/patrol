@@ -36,7 +36,7 @@ flowchart TD
 - `PatrolWidget/`: the WidgetKit extension, built for both watchOS and iOS.
 - `PatrolIntents/`: Siri and Shortcuts intents, built into both apps.
 - `PatrolPlaces/`: the place picker's entity, shared by all targets.
-- `Server/`: Swift package with a Hummingbird backend; it only serves `/health` so far.
+- `Server/`: Swift package with a Hummingbird backend.
 - `scripts/`: git hooks.
 
 ## Development
@@ -48,10 +48,11 @@ make build         # Core
 make test
 make server-build  # Server
 make server-test
+make install-hooks # once after cloning: format check before each commit
 ```
 
 The app and widgets build from Xcode.
 
 CI runs the Core and Server tests on macOS and Linux.
 
-Code is formatted with Apple's [swift-format](https://github.com/apple/swift-format), bundled with Xcode. Run `make install-hooks` once after cloning to catch unformatted commits locally; CI checks formatting on every push and pull request regardless.
+Code is formatted with Apple's [swift-format](https://github.com/apple/swift-format), bundled with Xcode. The pre-commit hook catches unformatted commits locally; CI checks formatting on every push and pull request regardless.
