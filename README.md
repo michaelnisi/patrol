@@ -1,6 +1,6 @@
 # Patrol 🌊
 
-A glance at your wrist or your lock screen tells you whether it's time to go.
+A glance at your wrist or your Lock Screen tells you whether it's time to go.
 
 Wave height, period, and wind, live from weather stations, for the spots you pick.
 
