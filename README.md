@@ -44,10 +44,10 @@ flowchart TD
 Build and test the packages from the repository root:
 
 ```bash
-make build         # Core
-make test
-make server-build  # Server
-make server-test
+make build         # build Core
+make test          # test Core
+make server-build  # build Server
+make server-test   # test Server
 make install-hooks # once after cloning: format check before each commit
 ```
 
