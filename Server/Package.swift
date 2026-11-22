@@ -7,11 +7,36 @@ let package = Package(
     platforms: [
         .macOS(.v14)
     ],
+    products: [
+        .library(
+            name: "Observations",
+            targets: ["Observations"]
+        ),
+        .library(
+            name: "MarineInstitute",
+            targets: ["MarineInstitute"]
+        ),
+    ],
     dependencies: [
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.28.1"),
         .package(path: "../Core"),
     ],
     targets: [
+        .target(
+            name: "Observations"
+        ),
+        .testTarget(
+            name: "ObservationsTests",
+            dependencies: ["Observations"]
+        ),
+        .target(
+            name: "MarineInstitute",
+            dependencies: ["Observations"]
+        ),
+        .testTarget(
+            name: "MarineInstituteTests",
+            dependencies: ["MarineInstitute", "Observations"]
+        ),
         .target(
             name: "App",
             dependencies: [

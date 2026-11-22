@@ -47,7 +47,8 @@ PatrolIntents/   # Siri / Shortcuts App Intents source, shared by two Xcode targ
                  #   Patrol Watch App (watchOS)
                  #   Patrol           (iOS)
 Server/          # Swift Package — Hummingbird backend-for-frontend; depends on Core's DomainTypes by path,
-                 # so Hummingbird never enters the app builds
+                 # so Hummingbird never enters the app builds. Its source layer (Observations plus one
+                 # target per source) does not depend on Hummingbird either
 PatrolPlaces/    # PlaceEntity (the place picker's AppEntity), shared by all four targets, because the
                  # widget configuration UI runs its query inside the widget extension
 ```
@@ -155,6 +156,13 @@ The `PatrolWidget/` source compiles unchanged into two separate Xcode targets �
 **Widget-first design**: the Watch app and the iOS Places screen are the foreground "driver" surfaces — each owns a live, `@Observable`-driven UI (`SurfProvider`, `PlacesModel`) that fetches while it is on screen, and only the Watch app also owns a background-refresh lifecycle (`BackgroundRefresh`, via `WKApplication` background tasks). Every other surface — the widget, the Intents, and any future Mac target — is a stateless *consumer*: it calls `ConditionsCoordinator` once per invocation (`TimelineProvider.timeline(for:in:)`, `AppIntent.perform()`) and reports the result, without owning a refresh lifecycle of its own. When adding a new non-Watch surface, model it after the widget's `TimelineProvider`-style one-shot call, not after `SurfProvider`.
 
 On watchOS, `ConditionsCoordinator.shared` is reused for both roles — the Watch's own driving (`SurfProvider`, `BackgroundRefresh`) and the Intent's on-demand consumer use — rather than standing up a second instance, so the existing `inFlight` de-dup in `ConditionsCoordinator` covers both call paths and they share one network session. On iOS, `.shared` in the app serves the Intents and the Places screen. The widget extension has its own `.shared`, in its own process.
+
+### Server Source Layer
+
+The Server fetches conditions from sources and delivers complete `SurfEntry` values; `SurfEntry` is the Server's output and the apps' input, never a parse target. Sources measure different things, so what they produce is a separate, flexible type. Only the source layer exists so far: the observation cache, the composition into `SurfEntry`, and the delivery endpoint come later.
+
+- **Observations** — `WaveObservation` and `WindObservation` (wrapped by `Observation`), each with a `StationID` and a date, and every measurement optional, so a wave-only buoy is a valid source. Units are SI and directions are degrees *from* true north; the adapter converts at its boundary, and rounding to a `Direction` belongs to the composition. `SourceAdapter` is the contract: one batch `request()` for all of its stations, and `observations(from:mimeType:)`, kept apart so parsing is testable offline. `SourceFault` names what can go wrong. Depends on nothing, and that is load-bearing: **no source's vocabulary may appear here**, so adding a source never edits `Observations`.
+- **One target per source** (`MarineInstitute` is the first) — owns its URL, its column names, its units and its stations. A missing column throws, so a changed dataset is never mistaken for a reading the provider left out, while an absent value is `nil`, never zero. Source quirks are pinned by that target's tests, not documented here.
 
 ## Concurrency Model
 

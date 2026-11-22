@@ -36,7 +36,7 @@ flowchart TD
 - `PatrolWidget/`: the WidgetKit extension, built for both watchOS and iOS.
 - `PatrolIntents/`: Siri and Shortcuts intents, built into both apps.
 - `PatrolPlaces/`: the place picker's entity, shared by all targets.
-- `Server/`: Swift package with a Hummingbird backend.
+- `Server/`: Swift package with a Hummingbird backend and the source layer that parses sources into observations.
 - `scripts/`: git hooks.
 
 ## Development
