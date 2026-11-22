@@ -19,12 +19,17 @@ struct Table: Decodable {
             }
         }
 
-        var number: Double? {
-            guard case .number(let value) = self else {
-                return nil
+        var measurement: Double? {
+            get throws {
+                switch self {
+                case .null:
+                    return nil
+                case .number(let value):
+                    return value
+                case .string:
+                    throw SourceFault.decoding
+                }
             }
-
-            return value
         }
 
         var string: String? {

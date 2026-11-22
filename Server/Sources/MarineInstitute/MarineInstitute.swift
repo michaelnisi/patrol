@@ -158,18 +158,18 @@ extension MarineInstitute {
         let wave = WaveObservation(
             station: station,
             date: date,
-            significantHeight: try row[columns.waveHeight].number,
-            maxHeight: try row[columns.maxHeight].number,
-            period: try row[columns.wavePeriod].number,
-            direction: try row[columns.waveDirection].number
+            significantHeight: try row[columns.waveHeight].measurement,
+            maxHeight: try row[columns.maxHeight].measurement,
+            period: try row[columns.wavePeriod].measurement,
+            direction: try row[columns.waveDirection].measurement
         )
 
         let wind = WindObservation(
             station: station,
             date: date,
-            speed: try row[columns.windSpeed].number.map(Self.metersPerSecond),
-            gust: try row[columns.gust].number.map(Self.metersPerSecond),
-            direction: try row[columns.windDirection].number
+            speed: try row[columns.windSpeed].measurement.map(Self.metersPerSecond),
+            gust: try row[columns.gust].measurement.map(Self.metersPerSecond),
+            direction: try row[columns.windDirection].measurement
         )
 
         return [.wave(wave), .wind(wind)]

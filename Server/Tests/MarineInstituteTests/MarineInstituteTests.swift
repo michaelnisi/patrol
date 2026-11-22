@@ -141,6 +141,13 @@ struct MarineInstituteTests {
         }
     }
 
+    @Test("a measurement delivered as a string fails loudly instead of reading as missing")
+    func measurementAsString() {
+        #expect(throws: SourceFault.decoding) {
+            try adapter.observations(from: Fixture.measurementAsString, mimeType: json)
+        }
+    }
+
     @Test("an empty table yields no observations")
     func emptyTable() throws {
         #expect(try adapter.observations(from: Fixture.empty, mimeType: json).isEmpty)

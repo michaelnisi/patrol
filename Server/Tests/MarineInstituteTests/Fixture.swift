@@ -43,6 +43,18 @@ enum Fixture {
         }
         """.utf8)
 
+    static let measurementAsString = Data(
+        """
+        {
+          "table": {
+            \(columns),
+            "rows": [
+              ["M2", "2026-11-22T08:00:00Z", "2.461", 3.906, 5.508, 68, 25.843, 93, 31.877]
+            ]
+          }
+        }
+        """.utf8)
+
     static let empty = Data(
         """
         {
